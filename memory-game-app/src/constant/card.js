@@ -10,7 +10,6 @@ import playstore from '../assets/images/google-play.svg'
 import facebook from "../assets/images/facebook.svg";
 import instagram from "../assets/images/instagram.svg";
 import twitter from '../assets/images/twitter.svg'
-import apple from '../assets/images/apple.png'
 
 
 const cardsEasy = [

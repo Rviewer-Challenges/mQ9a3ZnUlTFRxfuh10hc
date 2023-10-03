@@ -4,10 +4,13 @@
   box-sizing: border-box;
 }
 
-#root {
-  height: 100vh;
-  display: flex;
+html{
   background: #0b091f;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
 }
 
 .memory-game {
@@ -30,6 +33,8 @@
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
+
+
 
 .memory-card:active {
   transform: scale(0.97);
@@ -64,4 +69,8 @@
 .score{
   color: white;
   font-size: 24px;
+}
+
+.game-info{
+  color: white;
 }

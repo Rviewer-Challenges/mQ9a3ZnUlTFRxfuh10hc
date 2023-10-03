@@ -1,26 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { levelGame } from '../constant/card'
 
-function Game({level, score, setScore}) {
-   
-    let [cardsState, setCardsState] = useState(levelGame(level));
+function Game({ level, score, setScore }) {
+    const [cardsState, setCardsState] = useState(levelGame(level));
+    const [firstCard, setFirstCard] = useState(null);
+    const [secondClick, setSecondClick] = useState(false);
+    const [wait, setWait] = useState(false);
+    const [moves, setMoves] = useState(0);
+    const [remainingPairs, setRemainingPairs] = useState(cardsState.length / 2);
+    const [timer, setTimer] = useState(60); // 60 seconds timer
+    const [gameOver, setGameOver] = useState(false);
 
-    let [firstCard, setFirstCard] = useState(null);
+    useEffect(() => {
+        if (remainingPairs === 0) {
+            setGameOver(true);
+        }
+    }, [remainingPairs]);
 
-    let [secondClick, setSecondClick] = useState(false);
-    // set flag to wait for 1500ms
-    let [wait, setWait] = useState(false);
+    useEffect(() => {
+        if (timer === 0) {
+            setGameOver(true);
+        }
+    }, [timer]);
 
-    // functions
+    useEffect(() => {
+        if (gameOver) {
+            // You can handle the game-over logic here (e.g., show a message)
+            // and provide an option to restart the game.
+        }
+    }, [gameOver]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!gameOver && timer > 0) {
+                setTimer(timer - 1);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [timer, gameOver]);
+
+    const restartGame = () => {
+        setCardsState(levelGame(level));
+        setFirstCard(null);
+        setSecondClick(false);
+        setWait(false);
+        setMoves(0);
+        setRemainingPairs(cardsState.length / 2);
+        setTimer(60);
+        setScore(0)
+        setGameOver(false);
+    };
+
     const checker = async (card) => {
         if (card.name === firstCard.name) {
-            setScore(score+1)
-            console.log("hellooo");
+            setScore(score + 1);
             card["passed"] = true;
             firstCard["passed"] = true;
             changeCardStatusHandler(card);
             changeCardStatusHandler(firstCard);
+            setRemainingPairs(remainingPairs - 1);
         } else {
             setWait(true);
             setTimeout(() => {
@@ -40,13 +80,14 @@ function Game({level, score, setScore}) {
     };
 
     const handleClick = async (e, clickedCard) => {
-        if (wait) {
+        if (wait || gameOver) {
             return;
         }
         if (!secondClick) {
             await setFirstCard(clickedCard);
             await setSecondClick(true);
             changeCardStatusHandler(clickedCard);
+            setMoves(moves + 1);
         } else {
             await setSecondClick(false);
             changeCardStatusHandler(clickedCard);
@@ -57,6 +98,14 @@ function Game({level, score, setScore}) {
 
     return (
         <>
+            <section className="game-info">
+                <div className="move-counter">Moves: {moves}</div>
+                <div className="time-counter">Time: {timer} seconds</div>
+                <div className="remaining-pairs-counter">Remaining Pairs: {remainingPairs}</div>
+                <button onClick={restartGame} className="restart-button">
+                    Restart Game
+                </button>
+            </section>
             <section className="memory-game">
                 {cardsState?.map((card) => {
                     return (
@@ -68,6 +117,7 @@ function Game({level, score, setScore}) {
                     );
                 })}
             </section>
+
         </>
     );
 }
