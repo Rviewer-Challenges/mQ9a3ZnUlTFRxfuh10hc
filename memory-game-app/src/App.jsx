@@ -1,9 +1,11 @@
-function App() {
+import { useState } from "react"
 
+function App() {
+  const [level, setLevel] = useState('easy')
   return (
-    <>
-      <h1>Go</h1>
-    </>
+    <div>
+      
+    </div>
   )
 }
 

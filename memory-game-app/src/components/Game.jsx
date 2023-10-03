@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Card from "./Card";
 import { cardsData } from '../card'
 
-function Game() {
+function Game({level}) {
     const [score, setScore] = useState(0);
 
     let [cardsState, setCardsState] = useState(cardsData);
