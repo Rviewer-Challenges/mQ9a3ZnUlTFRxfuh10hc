@@ -54,3 +54,14 @@
 .front-face {
   transform: rotateY(180deg);
 }
+
+.game{
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+}
+
+.score{
+  color: white;
+  font-size: 24px;
+}

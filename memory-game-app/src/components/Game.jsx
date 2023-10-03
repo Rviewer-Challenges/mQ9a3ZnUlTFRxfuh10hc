@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import Card from "./Card";
-import { cardsData } from '../card'
+import { levelGame } from '../constant/card'
 
-function Game({level}) {
-    const [score, setScore] = useState(0);
-
-    let [cardsState, setCardsState] = useState(cardsData);
-
+function Game({level, score, setScore}) {
+   
+    let [cardsState, setCardsState] = useState(levelGame(level));
 
     let [firstCard, setFirstCard] = useState(null);
 
@@ -17,7 +15,7 @@ function Game({level}) {
     // functions
     const checker = async (card) => {
         if (card.name === firstCard.name) {
-            setScore(score++)
+            setScore(score+1)
             console.log("hellooo");
             card["passed"] = true;
             firstCard["passed"] = true;
@@ -69,9 +67,6 @@ function Game({level}) {
                         />
                     );
                 })}
-            </section>
-            <section className="score">
-                Score: {score}
             </section>
         </>
     );
