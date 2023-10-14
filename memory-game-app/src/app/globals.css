@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base{
+    :root {
+        --color-dark-blue: #152938;
+        --color-off-white: #FCFCFC;
+        --color-gray: #7191A5;
+        --color-light-gray: #BCCED9;
+        --color-orange: #FDA214;
+        --color-navy-blue: #304859;
+        --color-ash: #DFE7EC;
+        --color-light-blue: #6395B8;
+    }
+}
