@@ -11,7 +11,7 @@ const Button: FC<buttonProps> = ({ text, handleClick, isActive=false }) => {
     return (
         <button 
         onClick={handleClick} 
-        className={`px-6 py-2 text-white hover:bg-orange-color duration-300 font-semibold text-lg ${isActive ? `bg-orange-color`:`bg-light-gray`} whitespace-nowrap rounded-full`}>
+        className={`px-4 lg:px-6 py-2 text-white hover:bg-orange-color duration-300 font-semibold text-sm lg:text-lg ${isActive ? `bg-orange-color`:`bg-light-gray`} whitespace-nowrap rounded-full`}>
             {text}
         </button>
     )
