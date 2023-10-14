@@ -1,8 +1,9 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
+import Header from './_components/Header'
 
-const inter = Poppins({ subsets: ['latin'], weight: ['500', '600', '700', '800'] })
+const poppins = Poppins({ subsets: ['latin'], weight: ['500', '600', '700', '800'] })
 
 export const metadata: Metadata = {
   title: 'memory game',
@@ -15,8 +16,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html suppressHydrationWarning={true} lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en">
+      <body suppressHydrationWarning={true} className={poppins.className}>
+        <Header/>
+        {children}
+      </body>
     </html>
   )
 }
