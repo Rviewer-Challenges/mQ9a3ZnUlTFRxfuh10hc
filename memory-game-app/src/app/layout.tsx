@@ -1,7 +1,7 @@
+import { GameProvider } from '@/context/GameContext'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
-import Header from './_components/Header'
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['500', '600', '700', '800'] })
 
@@ -18,8 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className={poppins.className}>
-        <Header/>
+        <GameProvider>
         {children}
+        </GameProvider>
       </body>
     </html>
   )
