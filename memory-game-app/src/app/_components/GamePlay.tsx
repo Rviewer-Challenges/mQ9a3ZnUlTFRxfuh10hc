@@ -15,10 +15,9 @@ const GamePlay = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [flippedCount, setFlippedCount] = useState(0);
-  const [secondsMade, setSecondsMade] = useState<number>(seconds)
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isWinModal, setIsWinModal] = useState(false)
-  const { state } = useGameContext();
+  const { state, dispatch } = useGameContext();
   const [selected, setSelected] = useState<Array<number>>([]);
   const [gameBoard, setGameBoard] = useState<{ icon: ReactElement, value: string }[]>([]);
   const { selectedLevel } = state;
@@ -118,6 +117,37 @@ const GamePlay = () => {
     setHits(newHits);
   }
 
+  const handRestart = () => {
+    localStorage.setItem('selectedLevel', selectedLevel!);
+    dispatch({ type: 'RESTART_GAME' });
+
+    // Reset the timer states
+    setMinutes(0);
+    setSeconds(0);
+    setHits(0)
+    setVisible(true)
+    setIsOpenModal(false)
+    let iconArray: Array<{ icon: ReactElement, value: string }>;
+    if (selectedLevel === 'easy') {
+      iconArray = duplicatedRandomly(easy);
+      setSize(16)
+    } else if (selectedLevel === 'medium') {
+      setSize(24)
+      iconArray = duplicatedRandomly(medium);
+    } else {
+      setSize(30)
+      iconArray = duplicatedRandomly(hard)
+    }
+    setGameBoard(iconArray)
+    setValues(iconArray.map((val => val.value)))
+    setCardStates([...Array(size)].map(n => false))
+    // Reset the flippedCount
+    setFlippedCount(0);
+    const delayTimer = setTimeout(() => {
+      setVisible(false);
+    }, 3000);
+  }
+
   const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
   return (
@@ -140,7 +170,7 @@ const GamePlay = () => {
         </div>
       </div>
       {isOpenModal && (
-        <GameResultModal setModal={setIsOpenModal} movesNumber={hits} />
+        <GameResultModal handleRestart={handRestart} setModal={setIsOpenModal} movesNumber={hits} />
       )}
       {
         isWinModal && (
