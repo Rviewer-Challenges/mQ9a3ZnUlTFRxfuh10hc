@@ -9,6 +9,7 @@ type Action =
     | { type: 'DECREMENT_TIME' }
     | { type: 'DECREMENT_REMAINING_PAIRS' }
     | { type: 'SELECT_CARD'; payload: number }
+    | { type: 'RESTART_GAME' }
     | { type: 'CHECK_MATCH' };
 
 // Define your CardData type
@@ -54,6 +55,13 @@ const gameReducer = (state: GameState, action: Action): GameState => {
                 // Cards did not match, reset selected cards
                 return { ...state, selectedCards: [] };
             }
+        case 'RESTART_GAME':
+            const selectedLevel = state.selectedLevel; // Get the selected level from the current state
+            return {
+                ...initialState,
+                selectedLevel,
+                gameBoard: selectedLevel === 'easy' ? easy : selectedLevel === 'medium' ? medium : hard,
+            };
         default:
             return state;
     }
