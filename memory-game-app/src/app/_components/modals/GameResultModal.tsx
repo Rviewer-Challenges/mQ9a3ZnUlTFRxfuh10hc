@@ -3,23 +3,23 @@ import React, { FC } from 'react'
 import ModalLayout from './ModalLayout'
 import Button from '../Elements/Button'
 import { useRouter } from 'next/navigation'
+import { useGameContext } from '@/context/GameContext'
 
 type GameResultProps = {
     movesNumber: number
     setModal: React.Dispatch<React.SetStateAction<boolean>>
+    handleRestart: () => void
 }
 
-const GameResultModal: FC<GameResultProps> = ({ movesNumber, setModal }) => {
+const GameResultModal: FC<GameResultProps> = ({ movesNumber, setModal, handleRestart }) => {
     const {push} = useRouter()
-
+    const { dispatch } = useGameContext();
     const handleSetUpNewGame = () => {
         setModal(false)
         push("/")
     }
 
-    const handleRestart = () => {
-        setModal(false)
-    }
+
 
     return (
         <ModalLayout>
@@ -34,7 +34,7 @@ const GameResultModal: FC<GameResultProps> = ({ movesNumber, setModal }) => {
                         <span className='text-xl lg:text-2xl '>{movesNumber} Moves</span>
                     </div>
                     <div className='flex items-center gap-4 lg:gap-6'>
-                        <Button isActive={true} text='Restart' handleClick={()=> {}}/>
+                        <Button isActive={true} text='Restart' handleClick={handleRestart}/>
                         <Button isActive={false} text='Setup New Game' handleClick={handleSetUpNewGame}/>
                     </div>
                 </div>
