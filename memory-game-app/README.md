@@ -2,6 +2,8 @@
 
 Memory Game is a web-based game where players test their memory skills by matching pairs of cards.
 
+![game hard level screen](./game.png)
+
 ## Levels
 
 The game features three levels of difficulty:
