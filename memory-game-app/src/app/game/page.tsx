@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../_components/Header'
 import GamePlay from '../_components/GamePlay'
-//https://codepen.io/gullomagico/pen/rNLjQgy
+
 const Game = () => {
   return (
     <div className='w-full bg-off-white min-h-screen px-6 lg:px-0'>
