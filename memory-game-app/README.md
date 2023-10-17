@@ -56,7 +56,8 @@ npm run dev or yarn dev
 
 - React
 - Next.js
-- ...
+- Typescript
+- Tailwindcss
 
 ## Credits
 
