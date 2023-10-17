@@ -4,27 +4,29 @@ import CardCircle from './CardCircle'
 import { useGameContext } from '@/context/GameContext'
 import { easy, hard, medium } from '@/utils/levels';
 import { duplicatedRandomly } from '@/utils/helper';
-
-// type CardData = {
-//   id: number;
-//   value: number; // Or you can use a different data type as needed
-//   isFaceUp: boolean;
-//   icon: ReactElement;
-// };
+import GameResultModal from './modals/GameResultModal';
+import CardBoard from './CardBoard';
+import WinModal from './modals/WinModal';
 
 const GamePlay = () => {
   const [visible, setVisible] = useState<boolean>(true)
   const [size, setSize] = useState(16)
   const [hits, setHits] = useState(0);
-  const { state, dispatch } = useGameContext();
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [flippedCount, setFlippedCount] = useState(0);
+  const [secondsMade, setSecondsMade] = useState<number>(seconds)
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [isWinModal, setIsWinModal] = useState(false)
+  const { state } = useGameContext();
   const [selected, setSelected] = useState<Array<number>>([]);
   const [gameBoard, setGameBoard] = useState<{ icon: ReactElement, value: string }[]>([]);
   const { selectedLevel } = state;
   const [cardStates, setCardStates] = useState<Array<boolean>>([]);
   const [values, setValues] = useState<Array<string>>([])
+  
 
-  // Initialize gameBoard state
-
+  // set gameBoard effect
   useEffect(() => {
     let iconArray: Array<{ icon: ReactElement, value: string }>;
     if (selectedLevel === 'easy') {
@@ -37,29 +39,57 @@ const GamePlay = () => {
       setSize(30)
       iconArray = duplicatedRandomly(hard)
     }
-
     setGameBoard(iconArray)
     setValues(iconArray.map((val => val.value)))
 
   }, [selectedLevel]);
 
-
-  
-
-  useEffect(()=> {
-    setCardStates([...Array(size)].map(n => false))
-  },[])
-
+  let maxFlipping = size
+  // fill array with false board
   useEffect(() => {
-    setTimeout(() => {
-      setVisible(false)
-    }, 5000)
+    setCardStates([...Array(size)].map(n => false))
+  }, [])
 
-  }, [visible])
+  console.log(maxFlipping)
+  // Timer count effect
+  useEffect(() => {
+    if (!visible) {
+      const timerInterval = setInterval(() => {
+        if (minutes === 1 && seconds === 0) {
+          setIsOpenModal(true)
+          clearInterval(timerInterval);
+        } else if(flippedCount === maxFlipping){
+          clearInterval(timerInterval);
+          setIsWinModal(true)
+        } else {
+          if (seconds === 59) {
+            setMinutes((prevMinutes) => prevMinutes + 1);
+            setSeconds(0);
+          } else {
+            setSeconds((prevSeconds) => prevSeconds + 1);
+          }
+        }
+      }, 1000);
+      return () => {
+        clearInterval(timerInterval);
+      };
+    }
 
+  }, [minutes, seconds, visible]);
 
-  console.log(values,"vvvv")
-  const handleCardClick = (index:number) => {
+  // delay effect
+  useEffect(() => {
+    const delayTimer = setTimeout(() => {
+      setVisible(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(delayTimer);
+    };
+  }, []);
+
+  // handling click
+  const handleCardClick = (index: number) => {
     let newCards = [...cardStates];
     let newSelected: Array<number> = [...selected];
     let newHits = hits;
@@ -76,34 +106,47 @@ const GamePlay = () => {
 
     if (newSelected.length > 1 && values[newSelected[0]] === values[newSelected[1]]) {
       newSelected = [];
+      setFlippedCount((count) => count + 2);
     }
-
+    if (flippedCount + 2 === size) {
+      // All cards are flipped, stop the timer and show the game result modal
+      setVisible(false);
+      setIsOpenModal(true);
+    }
     setCardStates(newCards);
     setSelected(newSelected);
     setHits(newHits);
   }
 
- 
-
-  
-
+  const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
   return (
-    <div>
-      <div className='max-w-sm flex flex-wrap gap-4 mx-auto px-4'>
-        {gameBoard.map((data, index) => (
-          <CardCircle
-            key={index}
-            gridSize={selectedLevel === "easy" ? 4: 6}
-            visible={visible ? visible : cardStates[index]}
-            icon={data.icon}
-            onClick={() => handleCardClick(index)}
-          />
-        ))}
+    <div className='h-[80vh] flex items-center'>
+      <div className={` ${selectedLevel === 'easy' ? `max-w-md` : `max-w-lg`} mx-auto d-flex-col gap-6 lg:gap-10`}>
+        <div className='flex flex-wrap gap-4 w-full px-4'>
+          {gameBoard.map((data, index) => (
+            <CardCircle
+              key={index}
+              gridSize={selectedLevel === "easy" ? 4 : 6}
+              visible={visible ? visible : cardStates[index]}
+              icon={data.icon}
+              onClick={() => handleCardClick(index)}
+            />
+          ))}
+        </div>
+        <div className='flex gap-4'>
+          <CardBoard text='Time' result={formattedTime} />
+          <CardBoard text='Moves' result={`${hits}`} />
+        </div>
       </div>
-      <div className="text-center">
-        <p>Hits: {hits}</p>
-      </div>
+      {isOpenModal && (
+        <GameResultModal setModal={setIsOpenModal} movesNumber={hits} />
+      )}
+      {
+        isWinModal && (
+          <WinModal setModal={setIsWinModal} time={`0:${seconds} seconds`} moves={`${hits} moves`} />
+        )
+      }
     </div>
   )
 }
