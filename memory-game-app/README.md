@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Memory Game
 
-## Getting Started
+Memory Game is a web-based game where players test their memory skills by matching pairs of cards.
 
-First, run the development server:
+## Levels
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The game features three levels of difficulty:
+
+- **Easy**: 8 pairs of cards
+- **Medium**: 12 pairs of cards
+- **Hard**: 15 pairs of cards
+
+## Game Rules
+
+- Click on two cards to reveal their icons.
+- If the icons match, the cards stay face-up. Otherwise, they flip back face-down.
+- The goal is to match all pairs with the fewest moves and in the shortest time.
+
+## Move Count
+
+In this game, the move count is used as a measure of your performance. Fewer moves are better, as it indicates a better memory and faster completion time.
+
+## Local Development
+
+To set up the project locally, follow these steps:
+
+1. Clone the repository:
+
+```sh
+git clone https://github.com/Rviewer-Challenges/mQ9a3ZnUlTFRxfuh10hc
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigation to the folder
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+cd mQ9a3ZnUlTFRxfuh10hc/memory-game-app
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Install the dependencies:
 
-## Learn More
+```sh
+yarn install or npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Start the development server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+npm run dev or yarn dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+5. Open your web browser and go to [http://localhost:3000](http://localhost:3000) to play the game.
 
-## Deploy on Vercel
+## Technologies Used
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- React
+- Next.js
+- ...
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Credits
+
+This game was developed by Grace Nshokano Birindwa. If you have any questions or feedback, please contact [grace.devolop@gmail.com].
+
+Enjoy the game!
