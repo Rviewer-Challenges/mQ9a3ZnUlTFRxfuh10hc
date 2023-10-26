@@ -8,6 +8,7 @@ const GameContext = createContext<{ state: GameState; dispatch: Dispatch<Action>
 export const initialState: GameState = {
     selectedLevel: null,
     gameBoard: [],
+    visible: true,
     moveCount: 0,
     timeLeft: 60,
     size: 16,
