@@ -11,6 +11,7 @@ export const initialState: GameState = {
     moveCount: 0,
     timeLeft: 60,
     size: 16,
+    cardStates: [],
     remainingPairs: 0,
     selectedCards: [],
 };
