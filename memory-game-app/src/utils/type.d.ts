@@ -1,6 +1,7 @@
 export type GameState = {
     selectedLevel: string | null;
     gameBoard: CardData[];
+    cardStates: Array<boolean>;
     moveCount: number;
     timeLeft: number;
     size: number;
