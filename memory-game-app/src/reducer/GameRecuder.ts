@@ -6,14 +6,23 @@ import { duplicatedRandomly } from '@/utils/helper';
 export const gameReducer = (state: GameState, action: Action): GameState => {
     switch (action.type) {
         case 'SELECT_LEVEL':
+            localStorage.setItem("gameLevel",action.payload)
             return {
                 ...state,
                 selectedLevel: action.payload,
                 size: action.payload === "easy" ? 16 : action.payload === "medium" ? 24 : 30,
-                cardStates: action.payload === "easy" ? [...Array(16)].map(n => false) : action.payload === "medium" ? [...Array(24)].map(n => false) : [...Array(30)].map(n => false),
-                gameBoard: action.payload === 'easy' ? duplicatedRandomly(easy) : action.payload === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
-                selectedCards: [],
             };
+        case 'START_GAME':
+            let newVisibility = state.visible
+            setTimeout(() => {
+                newVisibility = false
+            }, 3000);
+            return {
+                ...state,
+                cardStates: [...[...Array(state.size)].map(n => false)],
+                gameBoard: state.selectedLevel === 'easy' ? duplicatedRandomly(easy) : state.selectedLevel === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
+                selectedCards: [],
+            }
         case 'DECREMENT_REMAINING_PAIRS':
             return { ...state, remainingPairs: state.remainingPairs - 2 };
         case 'SELECT_CARD':

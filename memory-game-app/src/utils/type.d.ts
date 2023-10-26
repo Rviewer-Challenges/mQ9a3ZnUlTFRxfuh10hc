@@ -1,6 +1,7 @@
 export type GameState = {
     selectedLevel: string | null;
     gameBoard: CardData[];
+    visible: boolean;
     cardStates: Array<boolean>;
     moveCount: number;
     timeLeft: number;
@@ -20,5 +21,6 @@ type Action =
     | { type: 'DECREMENT_TIME' }
     | { type: 'DECREMENT_REMAINING_PAIRS' }
     | { type: 'SELECT_CARD'; payload: number }
+    | { type: 'START_GAME' }
     | { type: 'RESTART_GAME' }
     | { type: 'CHECK_MATCH' };
