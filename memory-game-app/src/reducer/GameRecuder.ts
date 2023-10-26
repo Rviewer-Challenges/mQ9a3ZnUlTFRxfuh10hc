@@ -1,6 +1,7 @@
 import { easy, medium, hard } from '@/utils/levels';
 import { Action, GameState } from '@/utils/type';
 import { initialState } from '@/context/GameContext';
+import { duplicatedRandomly } from '@/utils/helper';
 
 export const gameReducer = (state: GameState, action: Action): GameState => {
     switch (action.type) {
@@ -9,22 +10,45 @@ export const gameReducer = (state: GameState, action: Action): GameState => {
                 ...state,
                 selectedLevel: action.payload,
                 size: action.payload === "easy" ? 16 : action.payload === "medium" ? 24 : 30,
-                gameBoard: action.payload === 'easy' ? easy : action.payload === 'medium' ? medium : hard,
+                cardStates: action.payload === "easy" ? [...Array(16)].map(n => false) : action.payload === "medium" ? [...Array(24)].map(n => false) : [...Array(30)].map(n => false),
+                gameBoard: action.payload === 'easy' ? duplicatedRandomly(easy) : action.payload === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
                 selectedCards: [],
             };
-        case 'INCREMENT_MOVE_COUNT':
-            return { ...state, moveCount: state.moveCount + 1 };
         case 'DECREMENT_REMAINING_PAIRS':
-            return { ...state, remainingPairs: state.remainingPairs - 1 };
+            return { ...state, remainingPairs: state.remainingPairs - 2 };
         case 'SELECT_CARD':
-            return { ...state, selectedCards: [...state.selectedCards, action.payload] };
+            let newCards = [...state.cardStates];
+            let newSelected = [...state.selectedCards]
+            let newMove = state.moveCount
+            if (newSelected.length > 1) {
+                newMove++
+                newCards[newSelected[0]] = false;
+                newCards[newSelected[1]] = false;
+                newSelected = [];
+            }
+            newSelected.push(action.payload)
+            newCards[action.payload] = true
+            if (newSelected.length > 1 && state.gameBoard[newSelected[0]].value === state.gameBoard[newSelected[1]].value) {
+                newCards[newSelected[0]] = true;
+                newCards[newSelected[1]] = true;
+                newSelected = [];
+            }
+
+            return {
+                ...state,
+                selectedCards: [...newSelected],
+                cardStates: [...newCards],
+                moveCount: newMove
+            };
 
         case 'RESTART_GAME':
             const selectedLevel = state.selectedLevel;
             return {
                 ...initialState,
                 selectedLevel,
-                gameBoard: selectedLevel === 'easy' ? easy : selectedLevel === 'medium' ? medium : hard,
+                size: selectedLevel === "easy" ? 16 : selectedLevel === "medium" ? 24 : 30,
+                cardStates: selectedLevel === "easy" ? [...Array(16)].map(n => false) : selectedLevel === "medium" ? [...Array(24)].map(n => false) : [...Array(30)].map(n => false),
+                gameBoard: selectedLevel === 'easy' ? duplicatedRandomly(easy) : selectedLevel === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
             };
         default:
             return state;
