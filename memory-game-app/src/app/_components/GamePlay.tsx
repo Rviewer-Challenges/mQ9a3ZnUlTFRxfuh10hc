@@ -1,5 +1,5 @@
 'use client'
-import React, { ReactElement, useEffect, useState, useSyncExternalStore } from 'react'
+import React, { ReactElement, useCallback, useEffect, useState, useSyncExternalStore } from 'react'
 import CardCircle from './CardCircle'
 import { useGameContext } from '@/context/GameContext'
 import { easy, hard, medium } from '@/utils/levels';
@@ -68,6 +68,10 @@ const GamePlay = () => {
     }, 3000);
   }
 
+  const handClick = useCallback((index: number) => {
+    dispatch({ type: "SELECT_CARD", payload: index })
+  }, [])
+
   const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
   return (
@@ -80,7 +84,7 @@ const GamePlay = () => {
               // gridSize={selectedLevel === "easy" ? 4 : 6}
               visible={visible ? visible : cardStates[index]}
               icon={data.icon}
-              onClick={() => dispatch({ type: "SELECT_CARD", payload: index })}
+              onClick={() => handClick(index)}
             />
           ))}
         </div>
