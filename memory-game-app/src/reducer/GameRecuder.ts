@@ -6,17 +6,13 @@ import { duplicatedRandomly } from '@/utils/helper';
 export const gameReducer = (state: GameState, action: Action): GameState => {
     switch (action.type) {
         case 'SELECT_LEVEL':
-            localStorage.setItem("gameLevel",action.payload)
+            localStorage.setItem("gameLevel", action.payload)
             return {
                 ...state,
                 selectedLevel: action.payload,
                 size: action.payload === "easy" ? 16 : action.payload === "medium" ? 24 : 30,
             };
         case 'START_GAME':
-            let newVisibility = state.visible
-            setTimeout(() => {
-                newVisibility = false
-            }, 3000);
             return {
                 ...state,
                 cardStates: [...[...Array(state.size)].map(n => false)],
@@ -38,6 +34,7 @@ export const gameReducer = (state: GameState, action: Action): GameState => {
             newSelected.push(action.payload)
             newCards[action.payload] = true
             if (newSelected.length > 1 && state.gameBoard[newSelected[0]].value === state.gameBoard[newSelected[1]].value) {
+                newMove++
                 newCards[newSelected[0]] = true;
                 newCards[newSelected[1]] = true;
                 newSelected = [];
@@ -49,7 +46,14 @@ export const gameReducer = (state: GameState, action: Action): GameState => {
                 cardStates: [...newCards],
                 moveCount: newMove
             };
-
+        case 'RESET_GAME':
+            return {
+                ...initialState,
+                moveCount: 0,
+                selectedLevel: "",
+                cardStates: [...[...Array(state.size)].map(n => false)],
+                gameBoard: state.selectedLevel === 'easy' ? duplicatedRandomly(easy) : state.selectedLevel === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
+            }
         case 'RESTART_GAME':
             const selectedLevel = state.selectedLevel;
             return {
