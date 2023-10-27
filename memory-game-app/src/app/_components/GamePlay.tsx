@@ -51,12 +51,6 @@ const GamePlay = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!cardStates.includes(false)) {
-      setIsWinModal(true)
-    }
-  }, [])
-
   const handRestart = () => {
     localStorage.setItem('selectedLevel', selectedLevel!);
     dispatch({ type: 'RESTART_GAME' });

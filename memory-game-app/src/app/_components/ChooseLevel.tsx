@@ -16,7 +16,6 @@ const ChooseLevel = () => {
 
     const handleStartGame = async () => {
         if(!state.selectedLevel){
-            console.log(state.visible)
             alert("please select game level first !!!")
         } else {
             await dispatch({type: "START_GAME"})
