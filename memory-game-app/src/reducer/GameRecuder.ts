@@ -11,12 +11,13 @@ export const gameReducer = (state: GameState, action: Action): GameState => {
                 ...state,
                 selectedLevel: action.payload,
                 size: action.payload === "easy" ? 16 : action.payload === "medium" ? 24 : 30,
+                gameLevelData: action.payload === "easy" ? easy : action.payload === "medium" ? medium : hard
             };
         case 'START_GAME':
             return {
                 ...state,
                 cardStates: [...[...Array(state.size)].map(n => false)],
-                gameBoard: state.selectedLevel === 'easy' ? duplicatedRandomly(easy) : state.selectedLevel === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
+                gameBoard: duplicatedRandomly(state.gameLevelData),
                 selectedCards: [],
             }
            
@@ -51,14 +52,13 @@ export const gameReducer = (state: GameState, action: Action): GameState => {
                 moveCount: 0,
                 selectedLevel: "",
                 cardStates: [...[...Array(state.size)].map(n => false)],
-                gameBoard: state.selectedLevel === 'easy' ? duplicatedRandomly(easy) : state.selectedLevel === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
+                gameBoard: duplicatedRandomly(state.gameLevelData),
             }
         case 'RESTART_GAME':
-            const selectedLevel = state.selectedLevel;
             return {
                 ...state,
                 cardStates: [...[...Array(state.size)].map(n => false)],
-                gameBoard: selectedLevel === 'easy' ? duplicatedRandomly(easy) : selectedLevel === 'medium' ? duplicatedRandomly(medium) : duplicatedRandomly(hard),
+                gameBoard: duplicatedRandomly(state.gameLevelData),
             };
         default:
             return state;
