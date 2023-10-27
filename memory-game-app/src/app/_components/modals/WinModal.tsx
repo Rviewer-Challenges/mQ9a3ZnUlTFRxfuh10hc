@@ -4,6 +4,7 @@ import ModalLayout from './ModalLayout'
 import CardBoard from '../CardBoard'
 import Button from '../Elements/Button'
 import { useRouter } from 'next/navigation'
+import { useGameContext } from '@/context/GameContext'
 
 type winModalProps = {
     time: string
@@ -13,14 +14,13 @@ type winModalProps = {
 
 const WinModal: FC<winModalProps> = ({ time, moves, setModal }) => {
     const { push } = useRouter()
+    const { dispatch } = useGameContext()
     const handleSetUpNewGame = () => {
         setModal(false)
         push("/")
+        dispatch({type: "RESET_GAME"})
     }
 
-    const handleRestart = () => {
-        setModal(false)
-    }
     return (
         <ModalLayout>
             <div className='d-flex-col items-center gap-6 lg:gap-8'>
