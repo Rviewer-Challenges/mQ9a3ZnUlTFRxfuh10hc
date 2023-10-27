@@ -2,11 +2,14 @@
 import React from 'react'
 import Button from './Elements/Button'
 import { useRouter } from 'next/navigation'
+import { useGameContext } from '@/context/GameContext'
 
 const Header = () => {
+    const { dispatch } = useGameContext()
     const router = useRouter()
     const handleNewGame = () => {
         router.push('/')
+        dispatch({ type: "RESET_GAME" })
     }
 
     return (

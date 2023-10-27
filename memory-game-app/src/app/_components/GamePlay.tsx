@@ -1,47 +1,44 @@
 'use client'
-import React, { ReactElement, useCallback, useEffect, useState, useSyncExternalStore } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CardCircle from './CardCircle'
 import { useGameContext } from '@/context/GameContext'
-import { easy, hard, medium } from '@/utils/levels';
-import { duplicatedRandomly } from '@/utils/helper';
 import GameResultModal from './modals/GameResultModal';
 import CardBoard from './CardBoard';
 import WinModal from './modals/WinModal';
 
 const GamePlay = () => {
   const [visible, setVisible] = useState<boolean>(true)
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0)
+  const [seconds, setSeconds] = useState(0)
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isWinModal, setIsWinModal] = useState(false)
   const { state, dispatch } = useGameContext();
   const { selectedLevel, gameBoard, moveCount, cardStates } = state;
 
   // Timer count effect
-  // useEffect(() => {
-  //   if (!visible) {
-  //     const timerInterval = setInterval(() => {
-  //       if (minutes === 1 && seconds === 0) {
-  //         setIsOpenModal(true)
-  //         clearInterval(timerInterval);
-  //       } else if(flippedCount === size){
-  //         clearInterval(timerInterval);
-  //         setIsWinModal(true)
-  //       } else {
-  //         if (seconds === 59) {
-  //           setMinutes((prevMinutes) => prevMinutes + 1);
-  //           setSeconds(0);
-  //         } else {
-  //           setSeconds((prevSeconds) => prevSeconds + 1);
-  //         }
-  //       }
-  //     }, 1000);
-  //     return () => {
-  //       clearInterval(timerInterval);
-  //     };
-  //   }
-
-  // }, [minutes, seconds, visible]);
+  useEffect(() => {
+    if (!visible) {
+      const timerInterval = setInterval(() => {
+        if (minutes === 1 && seconds === 0) {
+          setIsOpenModal(true);
+          clearInterval(timerInterval);
+        } else if (!cardStates.includes(false)) {
+          clearInterval(timerInterval);
+          setIsWinModal(true);
+        } else {
+          if (seconds === 59) {
+            setMinutes(prev => prev + 1)
+            setSeconds(0)
+          } else {
+            setSeconds(prev => prev + 1)
+          }
+        }
+      }, 1000);
+      return () => {
+        clearInterval(timerInterval);
+      };
+    }
+  }, [visible, seconds, minutes]);
 
   // delay effect
   useEffect(() => {
@@ -52,13 +49,17 @@ const GamePlay = () => {
     return () => {
       clearTimeout(delayTimer);
     };
-  }, []);  
+  }, []);
+
+  useEffect(() => {
+    if (!cardStates.includes(false)) {
+      setIsWinModal(true)
+    }
+  }, [])
 
   const handRestart = () => {
     localStorage.setItem('selectedLevel', selectedLevel!);
     dispatch({ type: 'RESTART_GAME' });
-
-    // Reset the timer states
     setMinutes(0);
     setSeconds(0);
     setVisible(true)
@@ -81,7 +82,6 @@ const GamePlay = () => {
           {gameBoard.map((data, index) => (
             <CardCircle
               key={index}
-              // gridSize={selectedLevel === "easy" ? 4 : 6}
               visible={visible ? visible : cardStates[index]}
               icon={data.icon}
               onClick={() => handClick(index)}
