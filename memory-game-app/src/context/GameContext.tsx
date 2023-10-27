@@ -1,5 +1,6 @@
 'use client'
 import { gameReducer } from '@/reducer/GameRecuder';
+import { easy } from '@/utils/levels';
 import { Action, GameState } from '@/utils/type';
 import React, { createContext, useReducer, useContext, Dispatch } from 'react';
 
@@ -9,6 +10,7 @@ export const initialState: GameState = {
     selectedLevel: null,
     gameBoard: [],
     moveCount: 0,
+    gameLevelData: easy,
     timeLeft: 60,
     size: 16,
     cardStates: [],
