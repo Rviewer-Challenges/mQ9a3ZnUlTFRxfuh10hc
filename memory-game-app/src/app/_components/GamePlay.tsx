@@ -2,7 +2,7 @@
 
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import CardCircle from "./CardCircle";
+import CardCircle from "./CardCircle/CardCircle";
 import { useGameContext } from "@/context/GameContext";
 import GameResultModal from "./modals/GameResultModal";
 import ResultBoard from "./ResultBoard";
