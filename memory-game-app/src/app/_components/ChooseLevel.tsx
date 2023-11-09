@@ -1,17 +1,27 @@
 'use client'
 import React, { useState } from 'react'
 import LevelButton from './Elements/LevelButton'
-import Link from 'next/link'
 import { useGameContext } from '@/context/GameContext'
+import { useRouter } from 'next/navigation'
 
 const ChooseLevel = () => {
-    const { dispatch } = useGameContext();
+    const router = useRouter()
+    const { dispatch, state } = useGameContext();
     const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
 
     const handleLevelSelect = (level: string) => {
         dispatch({ type: 'SELECT_LEVEL', payload: level });
         setSelectedLevel(level)
     };
+
+    const handleStartGame = async () => {
+        if(!state.selectedLevel){
+            alert("please select game level first !!!")
+        } else {
+            await dispatch({type: "START_GAME"})
+            router.push('/game')
+        }        
+    }
 
     return (
         <div className="max-w-sm mx-auto flex-1 flex flex-col gap-6 lg:gap-8">
@@ -26,7 +36,7 @@ const ChooseLevel = () => {
                     <LevelButton text="medium" isChosen={selectedLevel === 'medium'} onClick={() => handleLevelSelect('medium')} />
                     <LevelButton text="hard" isChosen={selectedLevel === 'hard'} onClick={() => handleLevelSelect('hard')} />
                 </div>
-                <Link href={"/game"} className="text-white bg-orange-color hover:bg-light-gray rounded-full w-full font-bold uppercase duration-300 text-center px-6 py-4">start play</Link>
+                <button onClick={()=> handleStartGame()} className="text-white bg-orange-color hover:bg-light-gray rounded-full w-full font-bold uppercase duration-300 text-center px-6 py-4">start play</button>
             </div>
         </div>
     )

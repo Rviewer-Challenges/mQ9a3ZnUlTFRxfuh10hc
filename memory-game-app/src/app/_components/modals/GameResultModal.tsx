@@ -12,14 +12,13 @@ type GameResultProps = {
 }
 
 const GameResultModal: FC<GameResultProps> = ({ movesNumber, setModal, handleRestart }) => {
-    const {push} = useRouter()
+    const { push } = useRouter()
     const { dispatch } = useGameContext();
     const handleSetUpNewGame = () => {
         setModal(false)
         push("/")
+        dispatch({ type: "RESTART_GAME" })
     }
-
-
 
     return (
         <ModalLayout>
@@ -34,8 +33,8 @@ const GameResultModal: FC<GameResultProps> = ({ movesNumber, setModal, handleRes
                         <span className='text-xl lg:text-2xl '>{movesNumber} Moves</span>
                     </div>
                     <div className='flex items-center gap-4 lg:gap-6'>
-                        <Button isActive={true} text='Restart' handleClick={handleRestart}/>
-                        <Button isActive={false} text='Setup New Game' handleClick={handleSetUpNewGame}/>
+                        <Button isActive={true} text='Restart' handleClick={handleRestart} />
+                        <Button isActive={false} text='Setup New Game' handleClick={handleSetUpNewGame} />
                     </div>
                 </div>
             </div>
